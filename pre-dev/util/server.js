@@ -1,4 +1,7 @@
 var http = require("http");
+var serverName = "VJudge Description Spider Tester Server Engine";
+var logger = require("log4js").getLogger("SRV");
+var mime = require("./mime");
 
 String.prototype.replaceAll = stringReplaceAll;
 function stringReplaceAll(AFindText,ARepText){
@@ -15,7 +18,7 @@ function getProblem(ojname, problemObject, resp) {
     var path = require("path");
     var dir = path.dirname(__filename);
 
-    fs.readFile(dir + "/pre-dev-template.html", function(err, data) {
+    fs.readFile(dir + "/template/randomproblem.html", function(err, data) {
         var StringDecoder = require('string_decoder').StringDecoder;
         var decoder = new StringDecoder('utf8');
         var text = decoder.write(data);
@@ -38,15 +41,119 @@ function getProblem(ojname, problemObject, resp) {
         text = text.replaceAll("_HINT_", problemObject["hint"]);
         text = text.replaceAll("_SOURCE_", problemObject["source"]);
 
+        resp.writeHead(200, {
+            "content-type"  : "text/html",
+            "server"        : serverName
+        });
         resp.write(text);
         resp.end();
     });
 };
 
-exports.start = function(callback) {
-    http.createServer(function(req, resp) {
-        resp.writeHead(200, { "content-type" : "text/html" });
+/**
+ * Show the error page.
+ * @param req
+ * @param resp
+ * @param err
+ */
+function showErrorPage(req, resp, msg, status) {
+    if(undefined === status) status = 404;
 
-        callback(getProblem, resp);
-    }).listen(8888);
+    var fs = require("fs");
+    var path = require("path");
+
+    var dir = path.dirname(__filename);
+    var filename = dir + "/template/error.html";
+
+    fs.readFile(filename, function(err, data) {
+        if(err) {
+            resp.writeHead(status, {
+                "content-type"  : "text/html",
+                "server"        : serverName
+            });
+            resp.write("Fatal Error: " + err.message);
+            resp.end();
+            return;
+        }
+
+        resp.writeHead(status, {
+            "content-type"  : "text/html",
+            "server"        : serverName
+        });
+
+        var StringDecoder = require('string_decoder').StringDecoder;
+        var decoder = new StringDecoder('utf8');
+        var text = decoder.write(data);
+
+        text = text.replaceAll("_ERROR_", msg.message);
+
+        resp.write(text);
+        resp.end();
+    });
+};
+
+/**
+ * Get the static resources from server.
+ *   e.g. foo.css and bar.js and so on.
+ *
+ * @param req
+ * @param resp
+ */
+function getStatic(req, resp) {
+    var fs = require("fs");
+    var path = require("path");
+
+    var dir = path.dirname(__filename);
+    var filename = dir + "/static" + req["url"];
+
+    fs.readFile(filename, "binary", function(err, data) {
+        if(err) {
+            logger.error("Failed in fetching static resources [ " + req["url"] + " ] : " + err.message + ".");
+
+            showErrorPage(req, resp, err);
+            return;
+        }
+
+        var ext = path.extname(filename);
+        ext = ext ? ext.slice(1) : 'unknown';
+
+        var contentType = mime[ext] || "text/plain";
+        resp.writeHead(200, {
+            "content-type"  : contentType,
+            "server"        : serverName
+        });
+
+        resp.write(data, "binary");
+        resp.end();
+    });
+}
+
+exports.start = function(callback, port) {
+    if(port === undefined) port = 8888;
+
+    try {
+        http.createServer(function(req, resp) {
+            logger.info("Received a request : " + req["url"] + " (" + req["headers"]["user-agent"] + ") from " + req.socket.remoteAddress + ".");
+
+            if(req["url"] === "/") {
+                resp.writeHead(302, {
+                    "content-type"  : "text/html",
+                    "location"      : "randomProblem",
+                    "server"        : serverName
+                });
+                resp.end();
+                return;
+            } else if(req["url"] === "/randomProblem") {
+                callback(getProblem, resp);
+                return;
+            } else {
+                getStatic(req, resp);
+                return;
+            }
+        }).listen(port);
+
+        logger.info("Test Server started at listening port " + port + ".");
+    } catch(e) {
+        logger.error("Can't start test server: " + e.message);
+    }
 };
