@@ -1,2 +1,2 @@
 var lsu = require("vjudge-description-spider").preDevTesterServer("lsu");
-lsu.start();
+lsu.start(6677);
