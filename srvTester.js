@@ -1,5 +1,2 @@
-var nbut = require("vjudge-description-spider").preDevTesterServer("nbut");
-nbut.start(8000);
-
-var lsu = require("vjudge-description-spider").preDevTesterServer("nbut");
-lsu.start(8001);
+var vjs = require("vjudge-description-spider");
+vjs.startTesterServer("lsu", "LSUOJ", 8000);

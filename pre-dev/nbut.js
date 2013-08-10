@@ -90,5 +90,5 @@ function nbutCallback(serverCallback, resp) {
 
 exports.start = function(port) {
     var server = require("./util/server");
-    server.start(nbutCallback, port);
+    server.startPreDev(nbutCallback, port);
 };

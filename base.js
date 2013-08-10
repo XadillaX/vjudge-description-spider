@@ -23,7 +23,7 @@ function vjdsbase(baseurl) {
 /**
  * Get the page count.
  *
- * @param callback
+ * @param callback(status, msg, page)
  */
 vjdsbase.prototype.getPageCount = function(callback) {
 };
@@ -32,7 +32,7 @@ vjdsbase.prototype.getPageCount = function(callback) {
  * Get the problemID list from page.
  *
  * @param pagenum
- * @param callback
+ * @param callback(status, msg, list)
  */
 vjdsbase.prototype.getProblemIDListFromPage = function(pagenum, callback) {
 };
@@ -42,10 +42,10 @@ vjdsbase.prototype.getProblemIDListFromPage = function(pagenum, callback) {
  * @param curpage
  * @param totpage
  * @param baseresult
- * @param callback
+ * @param callback(status, msg, list)
  * @private
  */
-vjdsbase.prototype.__getProblemIDListFromPageRecursion = function(curpage, totpage, baseresult, callback) {
+vjdsbase.prototype.__getProblemIDListFromPageRecursion = function(curpage, totpage, baseresult, callback, detail) {
     var self = this;
 
     /**
@@ -70,17 +70,18 @@ vjdsbase.prototype.__getProblemIDListFromPageRecursion = function(curpage, totpa
             setTimeout(cb, 1, true, "", baseresult);
             return;
         } else {
-            this.__getProblemIDListFromPageRecursion(curpage + 1, totpage, baseresult, callback);
+            self.__getProblemIDListFromPageRecursion(curpage + 1, totpage, baseresult, callback, detail);
             return;
         }
-    });
+    }, detail);
 };
 
 /**
  * Get the whole problem id list.
- * @param callback
+ * @param callback(status, msg, list)
+ * @param detail
  */
-vjdsbase.prototype.getAllProblemIDList = function(callback) {
+vjdsbase.prototype.getAllProblemIDList = function(callback, detail) {
     var self = this;
 
     this.getPageCount(function(status, msg, pagecount) {
@@ -93,7 +94,7 @@ vjdsbase.prototype.getAllProblemIDList = function(callback) {
             return;
         }
 
-        this.__getProblemIDListFromPageRecursion(1, pagecount, [], callback);
+        self.__getProblemIDListFromPageRecursion(1, pagecount, [], callback, detail);
     });
 };
 
@@ -101,18 +102,19 @@ vjdsbase.prototype.getAllProblemIDList = function(callback) {
  * Get the problemID list form a certain url.
  *
  * @param url
- * @param callback
+ * @param callback(status, msg, list)
+ * @param detail
  */
-vjdsbase.prototype.getProblemIDListFromUrl = function(url, callback) {
+vjdsbase.prototype.getProblemIDListFromUrl = function(url, callback, detail) {
 };
 
 /**
  * Get problem description by id.
  *
  * @param id
- * @param callback
+ * @param callback(status, msg, problemobject)
  */
-vjdsbase.prototype.getProblemByID = function(id, callback) {
+vjdsbase.prototype.getProblemByID = function(id, callback, detail) {
 };
 
 /**
@@ -155,3 +157,18 @@ exports.logger = function(name, level) {
     return logger;
 };
 
+/**
+ * Get a spider.
+ * @param ojname
+ * @param baseurl
+ * @returns {*}
+ */
+exports.getOJSpider = function(ojname, baseurl) {
+    var path = "./oj/" + ojname;
+    try {
+        var oj = require(path).create(baseurl);
+        return oj;
+    } catch(e) {
+        return null;
+    }
+}

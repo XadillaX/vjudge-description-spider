@@ -95,5 +95,5 @@ function lsuCallback(serverCallback, resp) {
 
 exports.start = function(port) {
     var server = require("./util/server");
-    server.start(lsuCallback, port);
+    server.startPreDev(lsuCallback, port);
 };
