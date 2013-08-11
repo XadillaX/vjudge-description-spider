@@ -130,6 +130,13 @@ lsu.prototype.getProblemIDListFromUrl = function(url, callback, detail) {
             }
 
             var listResults = data.match(reg);
+            if(listResults === null) {
+                par.logger.error("Failed to get the problem id list: data error.");
+                if(callback !== undefined) {
+                    callback.bind(par)(false, "data error", []);
+                }
+                return;
+            }
             for(var i = 0; i < listResults.length; i++) {
                 var result = freg.exec(listResults[i]);
                 if(result === null || result.length !== 2) {
@@ -165,6 +172,13 @@ lsu.prototype.getProblemIDListFromUrl = function(url, callback, detail) {
             }
 
             var listResults = data.match(reg);
+            if(listResults === null) {
+                par.logger.error("Failed to get the problem id list: data error.");
+                if(callback !== undefined) {
+                    callback.bind(par)(false, "data error", []);
+                }
+                return;
+            }
             for(var i = 0; i < listResults.length; i++) {
                 var result = freg.exec(listResults[i]);
                 if(result === null || result.length !== 5) {

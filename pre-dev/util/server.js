@@ -272,7 +272,7 @@ testerServer.prototype.processList = function(req, resp) {
 
     var qs = url.parse(req["url"]).query;
     qs = querystring.parse(qs);
-    if(qs["page"] !== null) {
+    if(qs["page"] !== undefined) {
         page = parseInt(qs["page"]);
     }
 
