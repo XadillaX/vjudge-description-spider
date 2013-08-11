@@ -346,7 +346,7 @@ testerServer.prototype.processList = function(req, resp) {
 
                 listReg = /{{ problist }}([\s\S]*){{ \/problist }}/g;
                 text = text.replace(listReg, listString);
-                text = text.replace("_OJNAME_", self.ojname);
+                text = text.replaceAll("_OJNAME_", self.ojname);
             }
 
             var pagination = '<div class="pagination pagination-mini pagination-centered"><ul>';
