@@ -203,6 +203,11 @@ testerServer.prototype.start = function(ojname, showname, port) {
     }
 }
 
+/**
+ * Process a certain problem
+ * @param req
+ * @param resp
+ */
 testerServer.prototype.processProblem = function(req, resp) {
     var id = NaN;
     var self = this;
@@ -250,6 +255,12 @@ testerServer.prototype.processProblem = function(req, resp) {
             text = text.replaceAll("_SOUTPUT_", problemObject["sampleOutput"]);
             text = text.replaceAll("_HINT_", problemObject["hint"]);
             text = text.replaceAll("_SOURCE_", problemObject["source"]);
+
+            if(problemObject["specialJudge"] === true) {
+                text = text.replaceAll("_SPECIALJUDGE_", ' <small class="muted">Special Judge</small>')
+            } else {
+                text = text.replaceAll("_SPECIALJUDGE_", "");
+            }
 
             resp.writeHead(200, {
                 "content-type"  : "text/html",

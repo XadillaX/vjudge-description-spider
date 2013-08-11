@@ -207,7 +207,7 @@ tehran.prototype.getProblemByID = function(id, callback) {
         /**
          * Verify the data.
          */
-        if(/<p id="info">Time Limit: <span class="red">[\d]+ Second[s]*<\/span> &nbsp;&nbsp; Memory Limit: <span class="red">[\d]+ KB<\/span><\/p>/.exec(data) === null) {
+        if(/<p id="info">Time Limit: <span class="red">[\d]+ Second[s]*<\/span> &nbsp;&nbsp; Memory Limit: <span class="red">[\d]+ KB<\/span>.*<\/p>/.exec(data) === null) {
             par.logger.error("Failed to get the problem: data error.");
             if(undefined !== callback) {
                 callback.bind(par)(false, "data error", null);
@@ -220,14 +220,17 @@ tehran.prototype.getProblemByID = function(id, callback) {
 
         prob.setID(id);
         prob.setTitle(/<title>ShareCode :: Problem #[\d]+ :: (.*)<\/title>/);
-        prob.setTime(/<p id="info">Time Limit: <span class="red">([\d]+) Second[s]*<\/span> &nbsp;&nbsp; Memory Limit: <span class="red">[\d]+ KB<\/span><\/p>/, 1000);
-        prob.setMemo(/<p id="info">Time Limit: <span class="red">[\d]+ Second[s]*<\/span> &nbsp;&nbsp; Memory Limit: <span class="red">([\d]+) KB<\/span><\/p>/);
-        prob.setDescription(/<p id="info">Time Limit: <span class="red">[\d]+ Second[s]*<\/span> &nbsp;&nbsp; Memory Limit: <span class="red">[\d]+ KB<\/span><\/p>([\s\S]*?)<h2>Input<\/h2>/);
+        prob.setTime(/<p id="info">Time Limit: <span class="red">([\d]+) Second[s]*<\/span> &nbsp;&nbsp; Memory Limit: <span class="red">[\d]+ KB<\/span>.*<\/p>/, 1000);
+        prob.setMemo(/<p id="info">Time Limit: <span class="red">[\d]+ Second[s]*<\/span> &nbsp;&nbsp; Memory Limit: <span class="red">([\d]+) KB<\/span>.*<\/p>/);
+        prob.setDescription(/<p id="info">Time Limit: <span class="red">[\d]+ Second[s]*<\/span> &nbsp;&nbsp; Memory Limit: <span class="red">[\d]+ KB<\/span>.*<\/p>([\s\S]*?)<h2>Input<\/h2>/);
         prob.setInput(/<h2>Input<\/h2>([\s\S]*)<h2>Output<\/h2>/);
         prob.setOutput(/<h2>Output<\/h2>([\s\S]*)<h2>Sample Input<\/h2>/);
         prob.setSampleInput(/<h2>Sample Input<\/h2>[\s]*<pre>([\s\S]*)<\/pre>[\s]*<h2>Sample Output<\/h2>/);
         prob.setSampleOutput(/<h2>Sample Output<\/h2>[\s]*<pre>([\s\S]*)<\/pre>[\s]*<a id="submit-btn" .*>Submit<\/a>/);
         prob.setSource(/<p id="problem_source">(.*)<\/p>/);
+        if(data.indexOf('<span class="red">Special Judge</span>') !== -1) {
+            prob.setSpecialJudge(true);
+        }
 
         prob.clearHtml();
         prob.remotify();
