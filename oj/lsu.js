@@ -259,6 +259,7 @@ lsu.prototype.getProblemByID = function(id, callback) {
         prob.setSampleOutput(/<font color="#333399" size="5">Sample Output<\/font>[\s\S]*<font face="Times New Roman" size="3"><pre>\n([\s\S]*)<\/pre><\/font><\/p>[\s\S]*<font color="#333399" size="5">[\s\S]*<\/font>/);
         prob.setHint(/<font color="#333399" size="5">Hint<\/font>[\s\S]*<font face="Times New Roman" size="3">([\s\S]*)<\/font><\/p>[\s\S]*<font color="#333399" size="5">Source<\/font>/);
         prob.setSource(/<font color="#333399" size="5">Source<\/font>[\s\S]*<font face="Times New Roman" size="3">([\s\S]*)<\/font><\/p>[\s\S]*<\/table>/);
+        prob.setProblemUrl(url);
 
         prob.clearHtml();
         prob.remotify();

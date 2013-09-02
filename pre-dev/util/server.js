@@ -256,6 +256,9 @@ testerServer.prototype.processProblem = function(req, resp) {
             text = text.replaceAll("_HINT_", problemObject["hint"]);
             text = text.replaceAll("_SOURCE_", problemObject["source"]);
 
+            text = text.replaceAll("_URL_", problemObject["url"]);
+            text = text.replaceAll("_BASEURL_", problemObject["baseurl"]);
+
             if(problemObject["specialJudge"] === true) {
                 text = text.replaceAll("_SPECIALJUDGE_", ' <small class="muted">Special Judge</small>')
             } else {

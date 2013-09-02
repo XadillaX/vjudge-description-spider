@@ -218,6 +218,7 @@ tehran.prototype.getProblemByID = function(id, callback) {
         var prob = base.util.problemObject.create(par.baseurl);
         prob.setHtml(base.util.unixify(data));
 
+        prob.setProblemUrl(url);
         prob.setID(id);
         prob.setTitle(/<title>ShareCode :: Problem #[\d]+ :: (.*)<\/title>/);
         prob.setTime(/<p id="info">Time Limit: <span class="red">([\d]+) Second[s]*<\/span> &nbsp;&nbsp; Memory Limit: <span class="red">[\d]+ KB<\/span>.*<\/p>/, 1000);
