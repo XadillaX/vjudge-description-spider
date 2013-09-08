@@ -12,7 +12,7 @@ var userAgent = "XadillaX' Virtual Judge Description Spider";
 var crypto = require("crypto");
 
 function vjdsbase(baseurl) {
-    this.spider = require("nodegrass");
+    this.spider = require("nodegrassex");
     this.logger = undefined;
 
     this.baseurl = baseurl;

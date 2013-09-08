@@ -1,0 +1,28 @@
+{
+  "name": "vjudge-description-spider",
+  "version": "0.0.1",
+  "description": "This project is the spider API for a number of Online Judge Systems.",
+  "main": "index.js",
+  "dependencies": {
+    "log4js": "~0.6.6",
+    "nodegrassex": "~0.0.2"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "node deploy-copy/srvTester.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/XadillaX/vjudge-description-spider.git"
+  },
+  "keywords": [
+    "ACM",
+    "OnlineJudge",
+    "VirtualJudge"
+  ],
+  "author": "XadillaX",
+  "license": "BSD",
+  "bugs": {
+    "url": "https://github.com/XadillaX/vjudge-description-spider/issues"
+  }
+}

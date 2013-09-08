@@ -12,7 +12,7 @@ var base = require("./base");
  * The spider util.
  * @type {*}
  */
-exports.spider = require("nodegrass");
+exports.spider = require("nodegrassex");
 
 /**
  * The core base class.
