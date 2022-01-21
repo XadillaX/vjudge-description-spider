@@ -4,7 +4,7 @@
   "description": "This project is the spider API for a number of Online Judge Systems.",
   "main": "index.js",
   "dependencies": {
-    "log4js": "~0.6.6",
+    "log4js": "~6.4.0",
     "nodegrassex": "~0.0.2"
   },
   "devDependencies": {},
